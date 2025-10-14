@@ -18,8 +18,8 @@ class IdentityCenterConstruct(Construct):
             name="MainIdentityCenter"
         )
 
-        # Create Permission Sets using tuple for managed policies
-        admin_policies: Sequence[str] = tuple(["arn:aws:iam::aws:policy/AdministratorAccess"])
+        # Create Permission Sets using list for managed policies (jsii expects lists)
+        admin_policies: List[str] = ["arn:aws:iam::aws:policy/AdministratorAccess"]
         
         self.admin_permission_set = sso.CfnPermissionSet(
             self, 
@@ -31,7 +31,7 @@ class IdentityCenterConstruct(Construct):
         )
 
         # Create ReadOnly Permission Set
-        readonly_policies: Sequence[str] = tuple(["arn:aws:iam::aws:policy/ReadOnlyAccess"])
+        readonly_policies: List[str] = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
         
         self.readonly_permission_set = sso.CfnPermissionSet(
             self,
@@ -51,7 +51,8 @@ class IdentityCenterConstruct(Construct):
         )
 
     def create_permission_set(self, name: str, policies: List[str], session_duration: str = "PT4H"):
-        managed_policies: Sequence[str] = tuple(policies)
+        # Ensure managed policies are provided as a list for jsii
+        managed_policies: List[str] = list(policies)
         return sso.CfnPermissionSet(
             self,
             f"{name}PermissionSet",
