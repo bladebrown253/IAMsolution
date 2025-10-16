@@ -1,0 +1,55 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and customize the values
+
+# AWS Configuration
+aws_region = "us-gov-west-1"
+environment = "prod"
+
+# Organization Configuration
+organization_id = "o-t73nbfcli"
+
+# Common tags
+tags = {
+  Project     = "AWS IAM Solution"
+  ManagedBy   = "Terraform"
+  Environment = "prod"
+  Owner       = "Security Team"
+  CostCenter  = "Security"
+}
+
+# MFA Policy Configuration
+mfa_policy_name = "require-mfa"
+security_ou_name = "Security"
+
+# Identity Center Configuration
+identity_center_name = "MainIdentityCenter"
+
+# Permission Sets Configuration
+permission_sets = {
+  admin = {
+    name             = "AdminAccess"
+    description      = "Administrator access permission set"
+    session_duration = "PT4H"
+    managed_policies = ["arn:aws-us-gov:iam::aws:policy/AdministratorAccess"]
+  }
+  readonly = {
+    name             = "ReadOnlyAccess"
+    description      = "Read-only access permission set"
+    session_duration = "PT4H"
+    managed_policies = ["arn:aws-us-gov:iam::aws:policy/ReadOnlyAccess"]
+  }
+  poweruser = {
+    name             = "PowerUser"
+    description      = "Power user access permission set"
+    session_duration = "PT4H"
+    managed_policies = ["arn:aws-us-gov:iam::aws:policy/PowerUserAccess"]
+  }
+}
+
+# Lambda Configuration
+lambda_function_name = "iam-remediation-function"
+lambda_runtime = "python3.9"
+lambda_timeout = 300
+
+# Access Analyzer Configuration
+access_analyzer_name = "org-analyzer"

@@ -1,0 +1,26 @@
+# AWS IAM Solution - Python Dependencies
+# Core AWS SDK
+boto3>=1.26.0
+botocore>=1.29.0
+
+# Terraform Python SDK (if using terraform-aws-provider)
+# terraform-aws-provider>=5.0.0
+
+# JSON Web Token handling (for SSO integration)
+python-jose>=3.3.0
+cryptography>=3.4.8
+
+# Additional utilities
+click>=8.0.0
+pyyaml>=6.0
+jinja2>=3.0.0
+
+# Development dependencies
+pytest>=6.0.0
+pytest-cov>=2.12.0
+black>=21.0.0
+flake8>=3.9.0
+mypy>=0.910
+
+# Optional: For advanced AWS operations
+awscli>=1.27.0
