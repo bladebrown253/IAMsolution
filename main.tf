@@ -17,9 +17,10 @@ provider "aws" {
   
   # GovCloud specific configuration
   endpoints {
-    organizations = "https://organizations.us-gov-west-1.amazonaws.com"
-    sso          = "https://sso.us-gov-west-1.amazonaws.com"
-    accessanalyzer = "https://access-analyzer.us-gov-west-1.amazonaws.com"
+    organizations    = "https://organizations.us-gov-west-1.amazonaws.com"
+    sso             = "https://sso.us-gov-west-1.amazonaws.com"
+    accessanalyzer  = "https://access-analyzer.us-gov-west-1.amazonaws.com"
+    ssoadmin        = "https://sso.us-gov-west-1.amazonaws.com"
   }
 }
 
@@ -40,11 +41,9 @@ resource "aws_organizations_organizational_unit" "security" {
   name      = "Security"
   parent_id = data.aws_organizations_organization.existing.roots[0].id
 
-  tags = {
-    Name        = "Security OU"
-    Environment = var.environment
-    Project     = "AWS IAM Solution"
-  }
+  tags = merge(var.tags, {
+    Name = "Security OU"
+  })
 }
 
 # Create SCP for MFA requirement
@@ -77,11 +76,9 @@ resource "aws_organizations_policy" "mfa_policy" {
     ]
   })
 
-  tags = {
-    Name        = "MFA Requirement Policy"
-    Environment = var.environment
-    Project     = "AWS IAM Solution"
-  }
+  tags = merge(var.tags, {
+    Name = "MFA Requirement Policy"
+  })
 }
 
 # Attach MFA policy to Security OU
@@ -91,16 +88,15 @@ resource "aws_organizations_policy_attachment" "mfa_policy_attachment" {
   target_id = aws_organizations_organizational_unit.security.id
 }
 
-# Identity Center (SSO) Configuration
-resource "aws_ssoadmin_instance" "main" {
+# Data source for existing Identity Center instance
+data "aws_ssoadmin_instances" "main" {
   provider = aws
-  name     = "MainIdentityCenter"
 }
 
 # Admin Permission Set
 resource "aws_ssoadmin_permission_set" "admin" {
   provider         = aws
-  instance_arn     = aws_ssoadmin_instance.main.arn
+  instance_arn     = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   name             = "AdminAccess"
   session_duration = "PT4H"
   description      = "Administrator access permission set"
@@ -109,7 +105,7 @@ resource "aws_ssoadmin_permission_set" "admin" {
 # Attach AdministratorAccess policy to admin permission set
 resource "aws_ssoadmin_managed_policy_attachment" "admin_policy" {
   provider           = aws
-  instance_arn       = aws_ssoadmin_instance.main.arn
+  instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   permission_set_arn = aws_ssoadmin_permission_set.admin.arn
   managed_policy_arn = "arn:aws-us-gov:iam::aws:policy/AdministratorAccess"
 }
@@ -117,7 +113,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "admin_policy" {
 # ReadOnly Permission Set
 resource "aws_ssoadmin_permission_set" "readonly" {
   provider         = aws
-  instance_arn     = aws_ssoadmin_instance.main.arn
+  instance_arn     = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   name             = "ReadOnlyAccess"
   session_duration = "PT4H"
   description      = "Read-only access permission set"
@@ -126,7 +122,7 @@ resource "aws_ssoadmin_permission_set" "readonly" {
 # Attach ReadOnlyAccess policy to readonly permission set
 resource "aws_ssoadmin_managed_policy_attachment" "readonly_policy" {
   provider           = aws
-  instance_arn       = aws_ssoadmin_instance.main.arn
+  instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   permission_set_arn = aws_ssoadmin_permission_set.readonly.arn
   managed_policy_arn = "arn:aws-us-gov:iam::aws:policy/ReadOnlyAccess"
 }
@@ -134,7 +130,7 @@ resource "aws_ssoadmin_managed_policy_attachment" "readonly_policy" {
 # PowerUser Permission Set
 resource "aws_ssoadmin_permission_set" "poweruser" {
   provider         = aws
-  instance_arn     = aws_ssoadmin_instance.main.arn
+  instance_arn     = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   name             = "PowerUser"
   session_duration = "PT4H"
   description      = "Power user access permission set"
@@ -143,7 +139,7 @@ resource "aws_ssoadmin_permission_set" "poweruser" {
 # Attach PowerUserAccess policy to poweruser permission set
 resource "aws_ssoadmin_managed_policy_attachment" "poweruser_policy" {
   provider           = aws
-  instance_arn       = aws_ssoadmin_instance.main.arn
+  instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   permission_set_arn = aws_ssoadmin_permission_set.poweruser.arn
   managed_policy_arn = "arn:aws-us-gov:iam::aws:policy/PowerUserAccess"
 }
@@ -154,11 +150,9 @@ resource "aws_accessanalyzer_analyzer" "org_analyzer" {
   analyzer_name = "org-analyzer"
   type         = "ORGANIZATION"
   
-  tags = {
-    Name        = "Organization Access Analyzer"
-    Environment = var.environment
-    Project     = "AWS IAM Solution"
-  }
+  tags = merge(var.tags, {
+    Name = "Organization Access Analyzer"
+  })
 }
 
 # Lambda function for automated remediation
@@ -171,11 +165,9 @@ resource "aws_lambda_function" "remediation" {
   runtime       = "python3.9"
   timeout       = 300
 
-  tags = {
-    Name        = "IAM Remediation Function"
-    Environment = var.environment
-    Project     = "AWS IAM Solution"
-  }
+  tags = merge(var.tags, {
+    Name = "IAM Remediation Function"
+  })
 }
 
 # IAM role for Lambda function
@@ -196,11 +188,9 @@ resource "aws_iam_role" "lambda_remediation_role" {
     ]
   })
 
-  tags = {
-    Name        = "IAM Remediation Lambda Role"
-    Environment = var.environment
-    Project     = "AWS IAM Solution"
-  }
+  tags = merge(var.tags, {
+    Name = "IAM Remediation Lambda Role"
+  })
 }
 
 # Attach basic execution policy to Lambda role
@@ -252,11 +242,9 @@ resource "aws_cloudwatch_event_rule" "access_analyzer_findings" {
     detail-type = ["Access Analyzer Finding"]
   })
 
-  tags = {
-    Name        = "Access Analyzer Findings Rule"
-    Environment = var.environment
-    Project     = "AWS IAM Solution"
-  }
+  tags = merge(var.tags, {
+    Name = "Access Analyzer Findings Rule"
+  })
 }
 
 # EventBridge target for Lambda function

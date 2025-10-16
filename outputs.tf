@@ -37,12 +37,12 @@ output "mfa_policy_arn" {
 
 output "identity_center_instance_arn" {
   description = "The ARN of the Identity Center instance"
-  value       = aws_ssoadmin_instance.main.arn
+  value       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
 }
 
 output "identity_center_instance_id" {
   description = "The ID of the Identity Center instance"
-  value       = aws_ssoadmin_instance.main.id
+  value       = tolist(data.aws_ssoadmin_instances.main.identity_store_ids)[0]
 }
 
 output "permission_sets" {
