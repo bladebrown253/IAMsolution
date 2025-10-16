@@ -1,14 +1,1640 @@
 {
  "Resources": {
+  "OrgConstructOrganization004880CE": {
+   "Type": "AWS::Organizations::Organization",
+   "Properties": {
+    "FeatureSet": "ALL"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/Organization"
+   }
+  },
+  "OrgConstructSecurityOUFE87D932": {
+   "Type": "AWS::Organizations::OrganizationalUnit",
+   "Properties": {
+    "Name": "Security",
+    "ParentId": {
+     "Fn::GetAtt": [
+      "OrgConstructOrganization004880CE",
+      "RootId"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/SecurityOU"
+   }
+  },
+  "OrgConstructSharedServicesOU413C759D": {
+   "Type": "AWS::Organizations::OrganizationalUnit",
+   "Properties": {
+    "Name": "SharedServices",
+    "ParentId": {
+     "Fn::GetAtt": [
+      "OrgConstructOrganization004880CE",
+      "RootId"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/SharedServicesOU"
+   }
+  },
+  "OrgConstructWorkloadsOUBF1F15D2": {
+   "Type": "AWS::Organizations::OrganizationalUnit",
+   "Properties": {
+    "Name": "Workloads",
+    "ParentId": {
+     "Fn::GetAtt": [
+      "OrgConstructOrganization004880CE",
+      "RootId"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/WorkloadsOU"
+   }
+  },
+  "OrgConstructProdOUDC0A0BE6": {
+   "Type": "AWS::Organizations::OrganizationalUnit",
+   "Properties": {
+    "Name": "Prod",
+    "ParentId": {
+     "Ref": "OrgConstructWorkloadsOUBF1F15D2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/ProdOU"
+   }
+  },
+  "OrgConstructDevOU1324BA55": {
+   "Type": "AWS::Organizations::OrganizationalUnit",
+   "Properties": {
+    "Name": "Dev",
+    "ParentId": {
+     "Ref": "OrgConstructWorkloadsOUBF1F15D2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/DevOU"
+   }
+  },
+  "OrgConstructSandboxOU7DD53932": {
+   "Type": "AWS::Organizations::OrganizationalUnit",
+   "Properties": {
+    "Name": "Sandbox",
+    "ParentId": {
+     "Ref": "OrgConstructWorkloadsOUBF1F15D2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/SandboxOU"
+   }
+  },
+  "OrgConstructMFAPolicy0A56369F": {
+   "Type": "AWS::Organizations::Policy",
+   "Properties": {
+    "Content": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Sid": "RequireMFA",
+       "Effect": "Deny",
+       "NotAction": [
+        "iam:CreateVirtualMFADevice",
+        "iam:EnableMFADevice",
+        "iam:GetUser",
+        "iam:ListMFADevices",
+        "iam:ListVirtualMFADevices",
+        "iam:ResyncMFADevice",
+        "sts:GetSessionToken"
+       ],
+       "Resource": "*",
+       "Condition": {
+        "BoolIfExists": {
+         "aws:MultiFactorAuthPresent": "false"
+        }
+       }
+      }
+     ]
+    },
+    "Name": "require-mfa",
+    "TargetIds": [
+     {
+      "Fn::GetAtt": [
+       "OrgConstructOrganization004880CE",
+       "RootId"
+      ]
+     }
+    ],
+    "Type": "SERVICE_CONTROL_POLICY"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/MFAPolicy"
+   }
+  },
+  "OrgConstructDenyUnsupportedRegionsEFE2FC9B": {
+   "Type": "AWS::Organizations::Policy",
+   "Properties": {
+    "Content": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Sid": "DenyRegionsNotAllowed",
+       "Effect": "Deny",
+       "Action": "*",
+       "Resource": "*",
+       "Condition": {
+        "StringNotEquals": {
+         "aws:RequestedRegion": [
+          "us-east-1",
+          "us-west-2"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    "Name": "deny-unsupported-regions",
+    "TargetIds": [
+     {
+      "Fn::GetAtt": [
+       "OrgConstructOrganization004880CE",
+       "RootId"
+      ]
+     }
+    ],
+    "Type": "SERVICE_CONTROL_POLICY"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/DenyUnsupportedRegions"
+   }
+  },
+  "OrgConstructProtectSecurityServicesF29B3FE8": {
+   "Type": "AWS::Organizations::Policy",
+   "Properties": {
+    "Content": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Sid": "DenyDisablingSecurityServices",
+       "Effect": "Deny",
+       "Action": [
+        "cloudtrail:DeleteTrail",
+        "cloudtrail:StopLogging",
+        "cloudtrail:UpdateTrail",
+        "config:DeleteConfigurationRecorder",
+        "config:StopConfigurationRecorder",
+        "config:DeleteDeliveryChannel",
+        "guardduty:DeleteDetector",
+        "guardduty:StopMonitoringMembers",
+        "access-analyzer:DeleteAnalyzer"
+       ],
+       "Resource": "*"
+      }
+     ]
+    },
+    "Name": "protect-security-services",
+    "TargetIds": [
+     {
+      "Fn::GetAtt": [
+       "OrgConstructOrganization004880CE",
+       "RootId"
+      ]
+     }
+    ],
+    "Type": "SERVICE_CONTROL_POLICY"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/ProtectSecurityServices"
+   }
+  },
+  "OrgConstructEnforceMandatoryTags6C8439FB": {
+   "Type": "AWS::Organizations::Policy",
+   "Properties": {
+    "Content": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Sid": "DenyCreateWithoutTags",
+       "Effect": "Deny",
+       "Action": [
+        "ec2:RunInstances",
+        "ec2:Create*",
+        "rds:Create*",
+        "s3:CreateBucket",
+        "lambda:CreateFunction",
+        "logs:CreateLogGroup"
+       ],
+       "Resource": "*",
+       "Condition": {
+        "ForAllValues:StringEqualsIfExists": {
+         "aws:TagKeys": [
+          "department",
+          "costCenter",
+          "environment"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    "Name": "enforce-mandatory-tags",
+    "TargetIds": [
+     {
+      "Ref": "OrgConstructWorkloadsOUBF1F15D2"
+     }
+    ],
+    "Type": "SERVICE_CONTROL_POLICY"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/EnforceMandatoryTags"
+   }
+  },
+  "OrgConstructDenyRootUser5BBDFA05": {
+   "Type": "AWS::Organizations::Policy",
+   "Properties": {
+    "Content": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Sid": "DenyRootUser",
+       "Effect": "Deny",
+       "Action": "*",
+       "Resource": "*",
+       "Condition": {
+        "StringLike": {
+         "aws:PrincipalArn": "arn:aws:iam::*:root"
+        }
+       }
+      }
+     ]
+    },
+    "Name": "deny-root-user",
+    "TargetIds": [
+     {
+      "Fn::GetAtt": [
+       "OrgConstructOrganization004880CE",
+       "RootId"
+      ]
+     }
+    ],
+    "Type": "SERVICE_CONTROL_POLICY"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/OrgConstruct/DenyRootUser"
+   }
+  },
+  "IdentityCenter2C71037B": {
+   "Type": "AWS::SSO::Instance",
+   "Properties": {
+    "Name": "MainIdentityCenter"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IdentityCenter/IdentityCenter"
+   }
+  },
+  "IdentityCenterABACAttributesD4E5ADC2": {
+   "Type": "AWS::SSO::InstanceAccessControlAttributeConfiguration",
+   "Properties": {
+    "AccessControlAttributes": [
+     {
+      "Key": "department",
+      "Value": {
+       "Source": [
+        "user.department"
+       ]
+      }
+     },
+     {
+      "Key": "costCenter",
+      "Value": {
+       "Source": [
+        "user.costCenter"
+       ]
+      }
+     },
+     {
+      "Key": "environment",
+      "Value": {
+       "Source": [
+        "user.environment"
+       ]
+      }
+     },
+     {
+      "Key": "jobFunction",
+      "Value": {
+       "Source": [
+        "user.title"
+       ]
+      }
+     }
+    ],
+    "InstanceArn": {
+     "Fn::GetAtt": [
+      "IdentityCenter2C71037B",
+      "InstanceArn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IdentityCenter/ABACAttributes"
+   }
+  },
+  "IdentityCenterAdminPermissionSetFA978DDF": {
+   "Type": "AWS::SSO::PermissionSet",
+   "Properties": {
+    "InstanceArn": {
+     "Fn::GetAtt": [
+      "IdentityCenter2C71037B",
+      "InstanceArn"
+     ]
+    },
+    "ManagedPolicies": [
+     "arn:aws:iam::aws:policy/AdministratorAccess"
+    ],
+    "Name": "AdminAccess",
+    "SessionDuration": "PT1H"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IdentityCenter/AdminPermissionSet"
+   }
+  },
+  "IdentityCenterPowerUserPermissionSet5C9385B4": {
+   "Type": "AWS::SSO::PermissionSet",
+   "Properties": {
+    "InstanceArn": {
+     "Fn::GetAtt": [
+      "IdentityCenter2C71037B",
+      "InstanceArn"
+     ]
+    },
+    "ManagedPolicies": [
+     "arn:aws:iam::aws:policy/PowerUserAccess"
+    ],
+    "Name": "PowerUserAccess",
+    "SessionDuration": "PT2H"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IdentityCenter/PowerUserPermissionSet"
+   }
+  },
+  "IdentityCenterReadOnlyPermissionSetDB373BB3": {
+   "Type": "AWS::SSO::PermissionSet",
+   "Properties": {
+    "InstanceArn": {
+     "Fn::GetAtt": [
+      "IdentityCenter2C71037B",
+      "InstanceArn"
+     ]
+    },
+    "ManagedPolicies": [
+     "arn:aws:iam::aws:policy/ReadOnlyAccess"
+    ],
+    "Name": "ReadOnlyAccess",
+    "SessionDuration": "PT8H"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IdentityCenter/ReadOnlyPermissionSet"
+   }
+  },
+  "IdentityCenterDeveloperPermissionSetF0F6AB63": {
+   "Type": "AWS::SSO::PermissionSet",
+   "Properties": {
+    "InlinePolicy": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Sid": "AllowTaggingForOwnership",
+       "Effect": "Allow",
+       "Action": [
+        "ec2:CreateTags",
+        "ec2:DeleteTags",
+        "s3:PutBucketTagging",
+        "lambda:TagResource",
+        "lambda:UntagResource"
+       ],
+       "Resource": "*",
+       "Condition": {
+        "ForAllValues:StringEquals": {
+         "aws:TagKeys": [
+          "department",
+          "environment"
+         ]
+        },
+        "StringEquals": {
+         "aws:RequestTag/department": "${aws:PrincipalTag/department}",
+         "aws:RequestTag/environment": "${aws:PrincipalTag/environment}"
+        }
+       }
+      },
+      {
+       "Sid": "AllowS3PerDept",
+       "Effect": "Allow",
+       "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+       ],
+       "Resource": "*",
+       "Condition": {
+        "StringEquals": {
+         "aws:ResourceTag/department": "${aws:PrincipalTag/department}",
+         "aws:ResourceTag/environment": "${aws:PrincipalTag/environment}"
+        }
+       }
+      },
+      {
+       "Sid": "DescribeOnly",
+       "Effect": "Allow",
+       "Action": [
+        "ec2:Describe*",
+        "rds:Describe*",
+        "cloudwatch:Get*",
+        "cloudwatch:List*"
+       ],
+       "Resource": "*"
+      }
+     ]
+    },
+    "InstanceArn": {
+     "Fn::GetAtt": [
+      "IdentityCenter2C71037B",
+      "InstanceArn"
+     ]
+    },
+    "ManagedPolicies": [
+     "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess",
+     "arn:aws:iam::aws:policy/AWSCloudFormationReadOnlyAccess"
+    ],
+    "Name": "DeveloperAccess",
+    "SessionDuration": "PT4H"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IdentityCenter/DeveloperPermissionSet"
+   }
+  },
+  "IAMMonitoringOrgAccessAnalyzerE0C53ABB": {
+   "Type": "AWS::AccessAnalyzer::Analyzer",
+   "Properties": {
+    "AnalyzerName": "org-analyzer",
+    "Type": "ORGANIZATION"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrgAccessAnalyzer"
+   }
+  },
+  "IAMMonitoringCloudTrailLogGroupABAB51AF": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/CloudTrailLogGroup/Resource"
+   }
+  },
+  "IAMMonitoringCloudTrailBucketE4948AC7": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/CloudTrailBucket/Resource"
+   }
+  },
+  "IAMMonitoringCloudTrailBucketPolicy0DD9C045": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "IAMMonitoringCloudTrailBucketE4948AC7"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": "false"
+        }
+       },
+       "Effect": "Deny",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "IAMMonitoringCloudTrailBucketE4948AC7",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "IAMMonitoringCloudTrailBucketE4948AC7",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "s3:GetBucketAcl",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::GetAtt": [
+         "IAMMonitoringCloudTrailBucketE4948AC7",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "s3:PutObject",
+       "Condition": {
+        "StringEquals": {
+         "s3:x-amz-acl": "bucket-owner-full-control"
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "IAMMonitoringCloudTrailBucketE4948AC7",
+            "Arn"
+           ]
+          },
+          "/AWSLogs/",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          "/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "s3:PutObject",
+       "Condition": {
+        "StringEquals": {
+         "s3:x-amz-acl": "bucket-owner-full-control",
+         "aws:SourceArn": {
+          "Fn::Join": [
+           "",
+           [
+            "arn:",
+            {
+             "Ref": "AWS::Partition"
+            },
+            ":cloudtrail:",
+            {
+             "Ref": "AWS::Region"
+            },
+            ":",
+            {
+             "Ref": "AWS::AccountId"
+            },
+            ":trail/undefined"
+           ]
+          ]
+         }
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "IAMMonitoringCloudTrailBucketE4948AC7",
+            "Arn"
+           ]
+          },
+          "/AWSLogs/undefined/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/CloudTrailBucket/Policy/Resource"
+   }
+  },
+  "IAMMonitoringOrganizationTrailLogsRole3475DDD4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/LogsRole/Resource"
+   }
+  },
+  "IAMMonitoringOrganizationTrailLogsRoleDefaultPolicy044460F8": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "IAMMonitoringCloudTrailLogGroupABAB51AF",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IAMMonitoringOrganizationTrailLogsRoleDefaultPolicy044460F8",
+    "Roles": [
+     {
+      "Ref": "IAMMonitoringOrganizationTrailLogsRole3475DDD4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/LogsRole/DefaultPolicy/Resource"
+   }
+  },
+  "IAMMonitoringOrganizationTrail7FE4C5FD": {
+   "Type": "AWS::CloudTrail::Trail",
+   "Properties": {
+    "CloudWatchLogsLogGroupArn": {
+     "Fn::GetAtt": [
+      "IAMMonitoringCloudTrailLogGroupABAB51AF",
+      "Arn"
+     ]
+    },
+    "CloudWatchLogsRoleArn": {
+     "Fn::GetAtt": [
+      "IAMMonitoringOrganizationTrailLogsRole3475DDD4",
+      "Arn"
+     ]
+    },
+    "EnableLogFileValidation": true,
+    "EventSelectors": [
+     {
+      "DataResources": [
+       {
+        "Type": "AWS::Lambda::Function",
+        "Values": [
+         {
+          "Fn::Join": [
+           "",
+           [
+            "arn:",
+            {
+             "Ref": "AWS::Partition"
+            },
+            ":lambda"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "DataResources": [
+       {
+        "Type": "AWS::S3::Object",
+        "Values": [
+         {
+          "Fn::Join": [
+           "",
+           [
+            "arn:",
+            {
+             "Ref": "AWS::Partition"
+            },
+            ":s3:::"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "IncludeGlobalServiceEvents": true,
+    "IsLogging": true,
+    "IsMultiRegionTrail": true,
+    "IsOrganizationTrail": true,
+    "S3BucketName": {
+     "Ref": "IAMMonitoringCloudTrailBucketE4948AC7"
+    }
+   },
+   "DependsOn": [
+    "IAMMonitoringCloudTrailBucketPolicy0DD9C045",
+    "IAMMonitoringOrganizationTrailLogsRoleDefaultPolicy044460F8",
+    "IAMMonitoringOrganizationTrailLogsRole3475DDD4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/Resource"
+   }
+  },
+  "IAMMonitoringConsoleSignInFailureFilter3A3ABC79": {
+   "Type": "AWS::Logs::MetricFilter",
+   "Properties": {
+    "FilterPattern": "{ ($.eventName = ConsoleLogin) && ($.errorMessage = \"Failed authentication\") }",
+    "LogGroupName": {
+     "Ref": "IAMMonitoringCloudTrailLogGroupABAB51AF"
+    },
+    "MetricTransformations": [
+     {
+      "MetricName": "ConsoleSignInFailureCount",
+      "MetricNamespace": "Security/IAM",
+      "MetricValue": "1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/ConsoleSignInFailureFilter/Resource"
+   }
+  },
+  "IAMMonitoringConsoleSignInFailureAlarmEB005104": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "DatapointsToAlarm": 1,
+    "EvaluationPeriods": 1,
+    "MetricName": "ConsoleSignInFailureCount",
+    "Namespace": "Security/IAM",
+    "Period": 300,
+    "Statistic": "Average",
+    "Threshold": 5,
+    "TreatMissingData": "notBreaching"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/ConsoleSignInFailureAlarm/Resource"
+   }
+  },
+  "IAMMonitoringRootUsageFilterD3AAD037": {
+   "Type": "AWS::Logs::MetricFilter",
+   "Properties": {
+    "FilterPattern": "{ ($.userIdentity.type = \"Root\") && ($.eventType != \"AwsServiceEvent\") }",
+    "LogGroupName": {
+     "Ref": "IAMMonitoringCloudTrailLogGroupABAB51AF"
+    },
+    "MetricTransformations": [
+     {
+      "MetricName": "RootUsageCount",
+      "MetricNamespace": "Security/IAM",
+      "MetricValue": "1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/RootUsageFilter/Resource"
+   }
+  },
+  "IAMMonitoringRootUsageAlarm7F8202F5": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "DatapointsToAlarm": 1,
+    "EvaluationPeriods": 1,
+    "MetricName": "RootUsageCount",
+    "Namespace": "Security/IAM",
+    "Period": 300,
+    "Statistic": "Average",
+    "Threshold": 1,
+    "TreatMissingData": "breaching"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/RootUsageAlarm/Resource"
+   }
+  },
+  "IAMMonitoringOrgRuleCloudTrailEnabledAA203EDD": {
+   "Type": "AWS::Config::OrganizationConfigRule",
+   "Properties": {
+    "OrganizationConfigRuleName": "org-cloud_trail_enabled",
+    "OrganizationManagedRuleMetadata": {
+     "RuleIdentifier": "CLOUD_TRAIL_ENABLED"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrgRuleCloudTrailEnabled"
+   }
+  },
+  "IAMMonitoringOrgRuleIamUserMfaEnabled37FCCE16": {
+   "Type": "AWS::Config::OrganizationConfigRule",
+   "Properties": {
+    "OrganizationConfigRuleName": "org-iam_user_mfa_enabled",
+    "OrganizationManagedRuleMetadata": {
+     "RuleIdentifier": "IAM_USER_MFA_ENABLED"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrgRuleIamUserMfaEnabled"
+   }
+  },
+  "IAMMonitoringOrgRuleRootMfaEnabledBC76422D": {
+   "Type": "AWS::Config::OrganizationConfigRule",
+   "Properties": {
+    "OrganizationConfigRuleName": "org-root_account_mfa_enabled",
+    "OrganizationManagedRuleMetadata": {
+     "RuleIdentifier": "ROOT_ACCOUNT_MFA_ENABLED"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrgRuleRootMfaEnabled"
+   }
+  },
+  "IAMMonitoringOrgRuleS3PublicReadProhibited02A10D45": {
+   "Type": "AWS::Config::OrganizationConfigRule",
+   "Properties": {
+    "OrganizationConfigRuleName": "org-s3_bucket_public_read_prohibited",
+    "OrganizationManagedRuleMetadata": {
+     "RuleIdentifier": "S3_BUCKET_PUBLIC_READ_PROHIBITED"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrgRuleS3PublicReadProhibited"
+   }
+  },
+  "IAMMonitoringOrgRuleS3PublicWriteProhibitedAB012D54": {
+   "Type": "AWS::Config::OrganizationConfigRule",
+   "Properties": {
+    "OrganizationConfigRuleName": "org-s3_bucket_public_write_prohibited",
+    "OrganizationManagedRuleMetadata": {
+     "RuleIdentifier": "S3_BUCKET_PUBLIC_WRITE_PROHIBITED"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/OrgRuleS3PublicWriteProhibited"
+   }
+  },
+  "IAMMonitoringRemediationFunctionServiceRole189403C2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/RemediationFunction/ServiceRole/Resource"
+   }
+  },
+  "IAMMonitoringRemediationFunctionServiceRoleDefaultPolicy5246534B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetBucketPolicy",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:ListAllMyBuckets",
+        "s3:PutBucketPolicy",
+        "s3:PutBucketPublicAccessBlock"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IAMMonitoringRemediationFunctionServiceRoleDefaultPolicy5246534B",
+    "Roles": [
+     {
+      "Ref": "IAMMonitoringRemediationFunctionServiceRole189403C2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/RemediationFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "IAMMonitoringRemediationFunctionB51F51EB": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "c79ecccc4fb7a2271abcfca2302eebe67b725b6b7678edb7a74ad055941b3a79.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "IAMMonitoringRemediationFunctionServiceRole189403C2",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "IAMMonitoringRemediationFunctionServiceRoleDefaultPolicy5246534B",
+    "IAMMonitoringRemediationFunctionServiceRole189403C2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/RemediationFunction/Resource",
+    "aws:asset:path": "asset.c79ecccc4fb7a2271abcfca2302eebe67b725b6b7678edb7a74ad055941b3a79",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "IAMMonitoringRemediationFunctionLogGroup3C31E862": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "IAMMonitoringRemediationFunctionB51F51EB"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/RemediationFunction/LogGroup/Resource"
+   }
+  },
+  "IAMMonitoringAccessAnalyzerFindings17149C8E": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "EventPattern": {
+     "detail-type": [
+      "Access Analyzer Finding"
+     ],
+     "source": [
+      "aws.access-analyzer"
+     ]
+    },
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "IAMMonitoringRemediationFunctionB51F51EB",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/AccessAnalyzerFindings/Resource"
+   }
+  },
+  "IAMMonitoringAccessAnalyzerFindingsAllowEventRuleAwsIamSolutionStackIAMMonitoringRemediationFunction34811B2508CA7992": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "IAMMonitoringRemediationFunctionB51F51EB",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "IAMMonitoringAccessAnalyzerFindings17149C8E",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/AccessAnalyzerFindings/AllowEventRuleAwsIamSolutionStackIAMMonitoringRemediationFunction34811B25"
+   }
+  },
+  "IAMMonitoringCredentialRotationFunctionServiceRoleD1307106": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/ServiceRole/Resource"
+   }
+  },
+  "IAMMonitoringCredentialRotationFunctionServiceRoleDefaultPolicy846DD474": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "iam:ListAccessKeys",
+        "iam:ListUsers",
+        "iam:UpdateAccessKey"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IAMMonitoringCredentialRotationFunctionServiceRoleDefaultPolicy846DD474",
+    "Roles": [
+     {
+      "Ref": "IAMMonitoringCredentialRotationFunctionServiceRoleD1307106"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "IAMMonitoringCredentialRotationFunction767382B8": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ZipFile": "\nimport boto3, datetime, json\niam = boto3.client('iam')\n\ndef handler(event, context):\n    paginator = iam.get_paginator('list_users')\n    now = datetime.datetime.now(datetime.timezone.utc)\n    disabled = []\n    for page in paginator.paginate():\n        for user in page['Users']:\n            access_keys = iam.list_access_keys(UserName=user['UserName']).get('AccessKeyMetadata', [])\n            for key in access_keys:\n                age_days = (now - key['CreateDate']).days\n                if age_days > 90 and key['Status'] == 'Active':\n                    iam.update_access_key(UserName=user['UserName'], AccessKeyId=key['AccessKeyId'], Status='Inactive')\n                    disabled.append({'user': user['UserName'], 'key': key['AccessKeyId'], 'ageDays': age_days})\n    print(json.dumps({'disabled': disabled}))\n    return {'disabledCount': len(disabled)}\n                "
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "IAMMonitoringCredentialRotationFunctionServiceRoleD1307106",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "IAMMonitoringCredentialRotationFunctionServiceRoleDefaultPolicy846DD474",
+    "IAMMonitoringCredentialRotationFunctionServiceRoleD1307106"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/Resource"
+   }
+  },
+  "IAMMonitoringCredentialRotationFunctionLogGroup0306E367": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "IAMMonitoringCredentialRotationFunction767382B8"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/LogGroup/Resource"
+   }
+  },
+  "IAMMonitoringDailyCredentialRotation0C3EC33E": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "ScheduleExpression": "cron(0 3 * * ? *)",
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "IAMMonitoringCredentialRotationFunction767382B8",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/DailyCredentialRotation/Resource"
+   }
+  },
+  "IAMMonitoringDailyCredentialRotationAllowEventRuleAwsIamSolutionStackIAMMonitoringCredentialRotationFunctionA8F40901EF08AFA5": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "IAMMonitoringCredentialRotationFunction767382B8",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "IAMMonitoringDailyCredentialRotation0C3EC33E",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/DailyCredentialRotation/AllowEventRuleAwsIamSolutionStackIAMMonitoringCredentialRotationFunctionA8F40901"
+   }
+  },
+  "IAMMonitoringJitGrantFunctionServiceRole14D04436": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/ServiceRole/Resource"
+   }
+  },
+  "IAMMonitoringJitGrantFunction411CE6DF": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ZipFile": "\nimport json\n\ndef handler(event, context):\n    # Placeholder: integrate with sso-admin to provision a temporary assignment\n    # Record ticket/reference for audit\n    print(json.dumps(event))\n    return {'granted': True}\n                "
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "IAMMonitoringJitGrantFunctionServiceRole14D04436",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "IAMMonitoringJitGrantFunctionServiceRole14D04436"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/Resource"
+   }
+  },
+  "IAMMonitoringJitGrantFunctionLogGroup533C77CF": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "IAMMonitoringJitGrantFunction411CE6DF"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/LogGroup/Resource"
+   }
+  },
+  "IAMMonitoringJitRevokeFunctionServiceRoleABD5E557": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/ServiceRole/Resource"
+   }
+  },
+  "IAMMonitoringJitRevokeFunction05D0ECE1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ZipFile": "\nimport json\n\ndef handler(event, context):\n    # Placeholder: remove temporary assignment via sso-admin\n    print(json.dumps(event))\n    return {'revoked': True}\n                "
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "IAMMonitoringJitRevokeFunctionServiceRoleABD5E557",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.11",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "IAMMonitoringJitRevokeFunctionServiceRoleABD5E557"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/Resource"
+   }
+  },
+  "IAMMonitoringJitRevokeFunctionLogGroup043D2F6C": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "IAMMonitoringJitRevokeFunction05D0ECE1"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/LogGroup/Resource"
+   }
+  },
+  "IAMMonitoringJitAccessStateMachineRoleB247E9E4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Role/Resource"
+   }
+  },
+  "IAMMonitoringJitAccessStateMachineRoleDefaultPolicy254FB9D8": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "IAMMonitoringJitGrantFunction411CE6DF",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "IAMMonitoringJitRevokeFunction05D0ECE1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "IAMMonitoringJitGrantFunction411CE6DF",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "IAMMonitoringJitRevokeFunction05D0ECE1",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IAMMonitoringJitAccessStateMachineRoleDefaultPolicy254FB9D8",
+    "Roles": [
+     {
+      "Ref": "IAMMonitoringJitAccessStateMachineRoleB247E9E4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Role/DefaultPolicy/Resource"
+   }
+  },
+  "IAMMonitoringJitAccessStateMachineE1A1040B": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"ManagerApproved\",\"States\":{\"ManagerApproved\":{\"Type\":\"Pass\",\"Next\":\"GrantTempAccess\"},\"GrantTempAccess\":{\"Next\":\"WaitDuration\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       {
+        "Fn::GetAtt": [
+         "IAMMonitoringJitGrantFunction411CE6DF",
+         "Arn"
+        ]
+       },
+       "\",\"Payload.$\":\"$\"}},\"WaitDuration\":{\"Type\":\"Wait\",\"Seconds\":1800,\"Next\":\"RevokeAccess\"},\"RevokeAccess\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       {
+        "Fn::GetAtt": [
+         "IAMMonitoringJitRevokeFunction05D0ECE1",
+         "Arn"
+        ]
+       },
+       "\",\"Payload.$\":\"$\"}}},\"TimeoutSeconds\":7200}"
+      ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "IAMMonitoringJitAccessStateMachineRoleB247E9E4",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "IAMMonitoringJitAccessStateMachineRoleDefaultPolicy254FB9D8",
+    "IAMMonitoringJitAccessStateMachineRoleB247E9E4"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzI01TNQTCwv1k1OydbNyUzSCy5JTM7WCagsycjP0zfWMzTWM1bMKs7M1C0qzSvJzE3VC4LQAIQtz9s8AAAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1XUW/bOAz+LdNjofq25uEAv7ndVhRot6DOrQ9BUDAy42hRpECiU2SC//tBsuU6be+G22HYdriHwBYpfvxEUyRzlp2dvc5ev4IHdyqqzamSy8yXBGLD4cHde2Nr0PILkDTaZf5ipT+OJPzJGtQfWlKQTo2S4tBy50y0utKOQAvko/dCCHTuwmiyRhVEVi4bwgujV7Ju7OBginYrnZNGl0gth2gFGtThC9rsYqWL/p0rU7vMX5v60ppmN/fM4tbsQXVkWM4qdGTNgXFmkVAHDyz/ffKm5Z6p3uwDbJHl7IT9W+EikE9k+A2SleK9VIR27tkqvkyBCK1mebTvVyVZqesemG2j3YA6FrgdiGPpJ1BNkiRCA8NuC8vn7IQtguCHc4gRGgem5W6S+fNGbJDmni2VEZtps1RSdLnSw6IW9rDrvh4rJ/c3xYfi8t3bqFkZK7Asr1lOtkHO9mhD6mDVCTqfnQfePbrsCO7icvTxxvp+8zk4nC9aLpRpKrIgVeZn4XFsz1nccAck1tfjIHAmtVBNhZfKLEGVaPdS4Ls9anKJsnQ3jSJ5i7U0OoI/asa37UjlUFczczH22gP22VkodQ3bZQVvgSA5HHIBqirKSlQoyNigKu7KPO9s8vx9o0WMOI82PBl2yOXkn6GWkzz/uPyMgo7wYtTjsVouYZv5W6Nw7hk412yxOj+ELN1ZqYXcgSqEMI1OAe/2BINC9KlxwtqexcxMk1UqBnPfdhyJQKyvtJIaB91wgL9VfjMrzragocYqYkoMMfNHskNh+72L/4/w0xzhV3D1XWP917jx6gYuvK+ngWKCm5mgeeblubiqSgLCbV9HIuH/MNDL4sV4gIp95CFU9MwXCux27hnuQTWxBUzRSlOlvkhri25tVNWvKyDYGanJzUy0TfssAt2EmUrXoW6znGlD5xZBrEPb50Of9uwBrJa6Ti7S8tPZY7Z9BzrLb+ISAxeRWy7iGJk9GVC74fK2UchVbGyZT41t7hnJLZpm6OCmSnPMGnSl0PYr2+iwcxhqfn6zGJh00OOZOoxc9+AcksuK8OAYu3jmQ5RisqGm0ZBYIYFUs8Mu+XWmsSLxYwS2RnID3TQCDAjzr0AMhSYCPd4UJ9ZYNSqZfN3PuGiNsbpK1ShsuSPcrfqwuMxPwTl+B5J4vJM3MQUxEl5JLbsa65lMCe0ILMWtw2Da3WY3RGP0sYYCGirDs5r8oiJSHXN5QvmewG1c1s1oV3pvNtjG/2QN7Rrit9gFNtbiF34LHr94SVBLXbd8eqC10b9NsjeTbPLqs5PytE+j7LZ7/gm8FOD4Lw4AAA=="
    },
    "Metadata": {
     "aws:cdk:path": "AwsIamSolutionStack/CDKMetadata/Default"
    },
    "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "OrgConstructOrganizationId855EA30E": {
+   "Description": "The ID of the AWS Organization",
+   "Value": {
+    "Fn::GetAtt": [
+     "OrgConstructOrganization004880CE",
+     "Id"
+    ]
+   }
+  },
+  "OrgConstructOrganizationRootIdC3677B6D": {
+   "Description": "The Root ID of the AWS Organization",
+   "Value": {
+    "Fn::GetAtt": [
+     "OrgConstructOrganization004880CE",
+     "RootId"
+    ]
+   }
+  },
+  "OrgConstructSecurityOuId28ED3237": {
+   "Value": {
+    "Ref": "OrgConstructSecurityOUFE87D932"
+   }
+  },
+  "OrgConstructSharedServicesOuId4A154F84": {
+   "Value": {
+    "Ref": "OrgConstructSharedServicesOU413C759D"
+   }
+  },
+  "OrgConstructWorkloadsOuId6906162E": {
+   "Value": {
+    "Ref": "OrgConstructWorkloadsOUBF1F15D2"
+   }
+  },
+  "OrgConstructProdOuId1CDBB1B8": {
+   "Value": {
+    "Ref": "OrgConstructProdOUDC0A0BE6"
+   }
+  },
+  "OrgConstructDevOuId3F5EEAEB": {
+   "Value": {
+    "Ref": "OrgConstructDevOU1324BA55"
+   }
+  },
+  "OrgConstructSandboxOuIdE8A0A463": {
+   "Value": {
+    "Ref": "OrgConstructSandboxOU7DD53932"
+   }
+  },
+  "IdentityCenterIdentityCenterArn18AF01A4": {
+   "Description": "The ARN of the Identity Center instance",
+   "Value": {
+    "Fn::GetAtt": [
+     "IdentityCenter2C71037B",
+     "InstanceArn"
+    ]
+   }
+  },
+  "IdentityCenterAdminPermissionSetArnFA1B6131": {
+   "Value": {
+    "Fn::GetAtt": [
+     "IdentityCenterAdminPermissionSetFA978DDF",
+     "PermissionSetArn"
+    ]
+   }
+  },
+  "IdentityCenterPowerUserPermissionSetArnABD0528F": {
+   "Value": {
+    "Fn::GetAtt": [
+     "IdentityCenterPowerUserPermissionSet5C9385B4",
+     "PermissionSetArn"
+    ]
+   }
+  },
+  "IdentityCenterReadOnlyPermissionSetArnEDB491F4": {
+   "Value": {
+    "Fn::GetAtt": [
+     "IdentityCenterReadOnlyPermissionSetDB373BB3",
+     "PermissionSetArn"
+    ]
+   }
+  },
+  "IdentityCenterDeveloperPermissionSetArnA47B766B": {
+   "Value": {
+    "Fn::GetAtt": [
+     "IdentityCenterDeveloperPermissionSetF0F6AB63",
+     "PermissionSetArn"
+    ]
+   }
   }
  },
  "Conditions": {

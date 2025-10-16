@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f9e09ce22d0283ff990e9bd228701fffa05af42e0475104ded5453f658769e62.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/cd7a018be1fe394833d7948ea9472c1c4536c0dde79601d7759de41506a6c6b4.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -34,6 +34,1084 @@
         "AwsIamSolutionStack.assets"
       ],
       "metadata": {
+        "/AwsIamSolutionStack/OrgConstruct/Organization": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructOrganization004880CE"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/SecurityOU": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructSecurityOUFE87D932"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/SharedServicesOU": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructSharedServicesOU413C759D"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/WorkloadsOU": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructWorkloadsOUBF1F15D2"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/ProdOU": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructProdOUDC0A0BE6"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/DevOU": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructDevOU1324BA55"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/SandboxOU": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructSandboxOU7DD53932"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/MFAPolicy": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructMFAPolicy0A56369F"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/DenyUnsupportedRegions": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructDenyUnsupportedRegionsEFE2FC9B"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/ProtectSecurityServices": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructProtectSecurityServicesF29B3FE8"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/EnforceMandatoryTags": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructEnforceMandatoryTags6C8439FB"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/DenyRootUser": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructDenyRootUser5BBDFA05"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/OrganizationId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructOrganizationId855EA30E"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/OrganizationRootId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructOrganizationRootIdC3677B6D"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/SecurityOuId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructSecurityOuId28ED3237"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/SharedServicesOuId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructSharedServicesOuId4A154F84"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/WorkloadsOuId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructWorkloadsOuId6906162E"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/ProdOuId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructProdOuId1CDBB1B8"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/DevOuId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructDevOuId3F5EEAEB"
+          }
+        ],
+        "/AwsIamSolutionStack/OrgConstruct/SandboxOuId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrgConstructSandboxOuIdE8A0A463"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/IdentityCenter": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenter2C71037B"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/ABACAttributes": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterABACAttributesD4E5ADC2"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/AdminPermissionSet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterAdminPermissionSetFA978DDF"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/PowerUserPermissionSet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterPowerUserPermissionSet5C9385B4"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/ReadOnlyPermissionSet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterReadOnlyPermissionSetDB373BB3"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/DeveloperPermissionSet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterDeveloperPermissionSetF0F6AB63"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/IdentityCenterArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterIdentityCenterArn18AF01A4"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/AdminPermissionSetArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterAdminPermissionSetArnFA1B6131"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/PowerUserPermissionSetArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterPowerUserPermissionSetArnABD0528F"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/ReadOnlyPermissionSetArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterReadOnlyPermissionSetArnEDB491F4"
+          }
+        ],
+        "/AwsIamSolutionStack/IdentityCenter/DeveloperPermissionSetArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityCenterDeveloperPermissionSetArnA47B766B"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrgAccessAnalyzer": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrgAccessAnalyzerE0C53ABB"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CloudTrailLogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "removalPolicy": "destroy",
+              "retention": 731
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CloudTrailLogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringCloudTrailLogGroupABAB51AF"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CloudTrailBucket": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "blockPublicAccess": "*",
+              "encryption": "S3_MANAGED",
+              "enforceSSL": true,
+              "versioned": true
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CloudTrailBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringCloudTrailBucketE4948AC7"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CloudTrailBucket/Policy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "bucket": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CloudTrailBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringCloudTrailBucketPolicy0DD9C045"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrganizationTrail": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "bucket": "*",
+              "cloudWatchLogGroup": "*",
+              "includeGlobalServiceEvents": true,
+              "isMultiRegionTrail": true,
+              "isOrganizationTrail": true,
+              "sendToCloudWatchLogs": true
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "logAllLambdaDataEvents": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEventSelector": [
+                "AWS::Lambda::Function",
+                [
+                  "*"
+                ],
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "logAllS3DataEvents": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEventSelector": [
+                "AWS::S3::Object",
+                [
+                  "*"
+                ],
+                "*"
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/LogsRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/LogsRole/ImportLogsRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/LogsRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrganizationTrailLogsRole3475DDD4"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/LogsRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/LogsRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrganizationTrailLogsRoleDefaultPolicy044460F8"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrganizationTrail/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrganizationTrail7FE4C5FD"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/ConsoleSignInFailureFilter": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "filterPattern": {
+                "logPatternString": "*"
+              },
+              "metricName": "*",
+              "metricNamespace": "*",
+              "metricValue": "*",
+              "logGroup": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "metric": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/ConsoleSignInFailureFilter/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringConsoleSignInFailureFilter3A3ABC79"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/ConsoleSignInFailureAlarm": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "evaluationPeriods": "*",
+              "threshold": "*",
+              "datapointsToAlarm": "*",
+              "treatMissingData": "notBreaching",
+              "metric": {
+                "warnings": "*",
+                "warningsV2": "*"
+              }
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/ConsoleSignInFailureAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringConsoleSignInFailureAlarmEB005104"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RootUsageFilter": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "filterPattern": {
+                "logPatternString": "*"
+              },
+              "metricName": "*",
+              "metricNamespace": "*",
+              "metricValue": "*",
+              "logGroup": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "metric": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RootUsageFilter/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringRootUsageFilterD3AAD037"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RootUsageAlarm": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "evaluationPeriods": "*",
+              "threshold": "*",
+              "datapointsToAlarm": "*",
+              "treatMissingData": "breaching",
+              "metric": {
+                "warnings": "*",
+                "warningsV2": "*"
+              }
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RootUsageAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringRootUsageAlarm7F8202F5"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrgRuleCloudTrailEnabled": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrgRuleCloudTrailEnabledAA203EDD"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrgRuleIamUserMfaEnabled": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrgRuleIamUserMfaEnabled37FCCE16"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrgRuleRootMfaEnabled": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrgRuleRootMfaEnabledBC76422D"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrgRuleS3PublicReadProhibited": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrgRuleS3PublicReadProhibited02A10D45"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/OrgRuleS3PublicWriteProhibited": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringOrgRuleS3PublicWriteProhibitedAB012D54"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "timeout": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringRemediationFunctionServiceRole189403C2"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringRemediationFunctionServiceRoleDefaultPolicy5246534B"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringRemediationFunctionB51F51EB"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/RemediationFunction/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringRemediationFunctionLogGroup3C31E862"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/AccessAnalyzerFindings": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "eventPattern": {
+                "detailType": "*",
+                "source": "*"
+              },
+              "targets": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEventPattern": [
+                {
+                  "detailType": "*",
+                  "source": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addTarget": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/AccessAnalyzerFindings/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringAccessAnalyzerFindings17149C8E"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/AccessAnalyzerFindings/AllowEventRuleAwsIamSolutionStackIAMMonitoringRemediationFunction34811B25": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringAccessAnalyzerFindingsAllowEventRuleAwsIamSolutionStackIAMMonitoringRemediationFunction34811B2508CA7992"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "timeout": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringCredentialRotationFunctionServiceRoleD1307106"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/ServiceRole/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringCredentialRotationFunctionServiceRoleDefaultPolicy846DD474"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringCredentialRotationFunction767382B8"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/CredentialRotationFunction/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringCredentialRotationFunctionLogGroup0306E367"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/DailyCredentialRotation": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "schedule": "*",
+              "targets": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addEventPattern": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addTarget": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/DailyCredentialRotation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringDailyCredentialRotation0C3EC33E"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/DailyCredentialRotation/AllowEventRuleAwsIamSolutionStackIAMMonitoringCredentialRotationFunctionA8F40901": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringDailyCredentialRotationAllowEventRuleAwsIamSolutionStackIAMMonitoringCredentialRotationFunctionA8F40901EF08AFA5"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitGrantFunction": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "timeout": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitGrantFunctionServiceRole14D04436"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitGrantFunction411CE6DF"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitGrantFunction/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitGrantFunctionLogGroup533C77CF"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "timeout": "*",
+              "code": "*",
+              "handler": "*",
+              "runtime": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/ServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              },
+              "managedPolicies": [
+                {
+                  "managedPolicyArn": "*"
+                }
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/ServiceRole/ImportServiceRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitRevokeFunctionServiceRoleABD5E557"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitRevokeFunction05D0ECE1"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/LogGroup": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "logGroupName": "*"
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitRevokeFunction/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitRevokeFunctionLogGroup043D2F6C"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "definition": {
+                "id": "*",
+                "startState": "*",
+                "endStates": "*"
+              },
+              "timeout": "*"
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToRolePolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToRolePolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Role": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": {
+              "assumedBy": {
+                "principalAccount": "*",
+                "assumeRoleAction": "*"
+              }
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachInlinePolicy": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addToPrincipalPolicy": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Role/ImportRole": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitAccessStateMachineRoleB247E9E4"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Role/DefaultPolicy": [
+          {
+            "type": "aws:cdk:analytics:construct",
+            "data": "*"
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "attachToRole": [
+                "*"
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          },
+          {
+            "type": "aws:cdk:analytics:method",
+            "data": {
+              "addStatements": [
+                {}
+              ]
+            }
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitAccessStateMachineRoleDefaultPolicy254FB9D8"
+          }
+        ],
+        "/AwsIamSolutionStack/IAMMonitoring/JitAccessStateMachine/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IAMMonitoringJitAccessStateMachineE1A1040B"
+          }
+        ],
         "/AwsIamSolutionStack/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
