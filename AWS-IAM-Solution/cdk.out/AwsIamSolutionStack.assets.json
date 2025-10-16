@@ -1,16 +1,30 @@
 {
   "version": "48.0.0",
   "files": {
-    "f9e09ce22d0283ff990e9bd228701fffa05af42e0475104ded5453f658769e62": {
+    "c79ecccc4fb7a2271abcfca2302eebe67b725b6b7678edb7a74ad055941b3a79": {
+      "displayName": "IAMMonitoring/RemediationFunction/Code",
+      "source": {
+        "path": "asset.c79ecccc4fb7a2271abcfca2302eebe67b725b6b7678edb7a74ad055941b3a79",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region-56db9db2": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "c79ecccc4fb7a2271abcfca2302eebe67b725b6b7678edb7a74ad055941b3a79.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "cd7a018be1fe394833d7948ea9472c1c4536c0dde79601d7759de41506a6c6b4": {
       "displayName": "AwsIamSolutionStack Template",
       "source": {
         "path": "AwsIamSolutionStack.template.json",
         "packaging": "file"
       },
       "destinations": {
-        "current_account-current_region-04471373": {
+        "current_account-current_region-2dd9e6a5": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "f9e09ce22d0283ff990e9bd228701fffa05af42e0475104ded5453f658769e62.json",
+          "objectKey": "cd7a018be1fe394833d7948ea9472c1c4536c0dde79601d7759de41506a6c6b4.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

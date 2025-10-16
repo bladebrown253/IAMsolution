@@ -89,6 +89,7 @@ class OrganizationConstruct(Construct):
             },
             name="require-mfa",
             type="SERVICE_CONTROL_POLICY",
+            target_ids=[self.organization.attr_root_id],
         )
 
         # Deny usage outside approved regions
@@ -111,6 +112,7 @@ class OrganizationConstruct(Construct):
             },
             name="deny-unsupported-regions",
             type="SERVICE_CONTROL_POLICY",
+            target_ids=[self.organization.attr_root_id],
         )
 
         # Deny changes to critical security services
@@ -140,6 +142,7 @@ class OrganizationConstruct(Construct):
             },
             name="protect-security-services",
             type="SERVICE_CONTROL_POLICY",
+            target_ids=[self.organization.attr_root_id],
         )
 
         # Enforce tagging at creation time for ABAC enablement
@@ -171,6 +174,7 @@ class OrganizationConstruct(Construct):
             },
             name="enforce-mandatory-tags",
             type="SERVICE_CONTROL_POLICY",
+            target_ids=[self.workloads_ou.ref],
         )
 
         # Deny root user usage
@@ -193,41 +197,9 @@ class OrganizationConstruct(Construct):
             },
             name="deny-root-user",
             type="SERVICE_CONTROL_POLICY",
+            target_ids=[self.organization.attr_root_id],
         )
 
-        # Attach baseline policies to Root
-        organizations.CfnPolicyAttachment(
-            self,
-            "AttachMfaRoot",
-            policy_id=self.mfa_policy.ref,
-            target_id=self.organization.attr_root_id,
-        )
-        organizations.CfnPolicyAttachment(
-            self,
-            "AttachDenyRegionsRoot",
-            policy_id=self.deny_unsupported_regions.ref,
-            target_id=self.organization.attr_root_id,
-        )
-        organizations.CfnPolicyAttachment(
-            self,
-            "AttachProtectSecurityRoot",
-            policy_id=self.protect_security_services.ref,
-            target_id=self.organization.attr_root_id,
-        )
-        organizations.CfnPolicyAttachment(
-            self,
-            "AttachDenyRootUserRoot",
-            policy_id=self.deny_root_user.ref,
-            target_id=self.organization.attr_root_id,
-        )
-
-        # Attach tagging enforcement to Workloads only (allow more flexibility in SharedServices)
-        organizations.CfnPolicyAttachment(
-            self,
-            "AttachTagsWorkloads",
-            policy_id=self.enforce_mandatory_tags.ref,
-            target_id=self.workloads_ou.ref,
-        )
 
         # Output helpful identifiers
         CfnOutput(
